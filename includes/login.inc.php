@@ -33,9 +33,17 @@ switch($_SERVER['REQUEST_METHOD']) {
             }
             exit();
         } 
-        else if (empty($uid) || empty($pwd)) {              //empty field(s)!          
+        else if (empty($uid)) {              //empty field(s)!          
             if ($jsonData) { 
-                echo '{ "err": "empty" }';
+                echo '{ "err": "empty", "fields": ["uid"] }';
+            } else { 
+                header("Location: ../index.php?login=empty");
+            }
+            exit();
+        }
+        else if (empty($pwd)) {              //empty field(s)!          
+            if ($jsonData) { 
+                echo '{ "err": "empty", "fields": ["pwd"] }';
             } else { 
                 header("Location: ../index.php?login=empty");
             }
@@ -69,7 +77,7 @@ switch($_SERVER['REQUEST_METHOD']) {
                     $pwdCheck = password_verify($pwd, $row['user_pwd']);
                     if ($pwdCheck == false) {                           //wrong password!
                         if ($jsonData) {
-                            echo '{ "err": "login incorrect" }';
+                            echo '{ "err": "login incorrect", "fields": ["pwd"] }';
                         } else {
                             header("Location: ../index.php?login=nomatch");
                         }
@@ -108,7 +116,7 @@ switch($_SERVER['REQUEST_METHOD']) {
                 }
                 else {                                                  //no such user!
                     if ($jsonData) {
-                        echo '{ "err": "login incorrect" }';
+                        echo '{ "err": "login incorrect", "fields": ["uid"] }';
                     } else {
                         header("Location: ../index.php?login=nouser");
                     }
