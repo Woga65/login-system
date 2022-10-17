@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Login System</title>
+    <link rel="stylesheet" href="css/fonts.css">
+    <link rel="stylesheet" href="css/global-styles.css">
+    <link rel="stylesheet" href="css/login.css">
+    <script type="text/javascript" src="js/auth.js"></script>    
+</head>
+<body id="main" class="main fade-in" tabindex=0 >
+
+    <header class="main base-margin">
+        <h2 class="hello-message" id="hello-message">
+            You are not logged in.
+        </h2>
+        <p class="verified-message" id="verified-message"></p>
+    </header>
+    
+    <section id="auth" class="auth">
+        <div class="auth-container base-margin top-margin bottom-margin">
+
+
+            <div class="form-container container" id="login-container">
+                <form class="form login-form" id="login-form" action="includes/login.inc.php" method="post">
+        
+                    <div class="field-container container">
+                        <div>
+                            <label for="uid">Username</label>
+                        </div>
+                        <div>
+                            <input id="login-uid" class="form-field"
+                                type="text"
+                                name="uid"
+                                required
+                                placeholder="Username/Email...">
+                            <div class="hint">
+                                Username is required
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field-container container bcc">
+                        <div>
+                            <label for="bcc">bcc</label>
+                        </div>
+                        <div>
+                            <input id="login-bcc" class="form-field"
+                                type="text"
+                                name="bcc"
+                                placeholder="bcc...">
+                            <div class="hint">
+                                bcc is optional
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field-container container">
+                        <div>
+                            <label for="pwd">Password</label>
+                        </div>
+                        <div>
+                            <input id="login-pwd" class="form-field"
+                                type="password"
+                                name="pwd"
+                                required
+                                placeholder="Password...">
+                            <div class="hint">
+                                Your Password is required
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="submit-container container">
+                        <button type="submit" name="login-submit" id="login-submit" class="submit-button">Login</button>
+                    </div>
+                    
+                </form>
+            </div>
+
+
+            <div class="form-container container" id="signup-container">
+                <form class="form signup-form" id="signup-form" action="includes/signup.inc.php" method="post">
+
+                    <div class="field-container container">
+                        <div>
+                            <label for="uid">Username</label>
+                        </div>
+                        <div>
+                            <input id="signup-uid" class="form-field"
+                                type="text"
+                                name="uid"
+                                required
+                                placeholder="Username...">
+                            <div class="hint">
+                                Your Username is required
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field-container container">
+                        <div>
+                            <label for="uid">Full Name</label>
+                        </div>
+                        <div>
+                            <input id="signup-name" class="form-field"
+                                type="text"
+                                name="name"
+                                required
+                                placeholder="Full Name...">
+                            <div class="hint">
+                                Your Name is required
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field-container container">
+                        <div>
+                            <label for="email">Email</label>
+                        </div>
+                        <div>
+                            <input id="signup-email" class="form-field"
+                                type="email"
+                                name="email"
+                                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                                required
+                                placeholder="Email...">
+                            <div class="hint">
+                                Your valid Email is required
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field-container container bcc">
+                        <div>
+                            <label for="bcc">bcc</label>
+                        </div>
+                        <div>
+                            <input id="signup-bcc" class="form-field"
+                                type="text"
+                                name="bcc"
+                                placeholder="bcc...">
+                            <div class="hint">
+                                bcc is optional
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field-container container">
+                        <div>
+                            <label for="pwd">Password</label>
+                        </div>
+                        <div>
+                            <input id="signup-pwd" class="form-field"
+                                type="password"
+                                name="pwd"
+                                required
+                                placeholder="Password...">
+                            <div class="hint">
+                                Your Password is required
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field-container container">
+                        <div>
+                            <label for="pwdrepeat">Password</label>
+                        </div>
+                        <div>
+                            <input id="signup-pwdrepeat" class="form-field"
+                                type="password"
+                                name="pwdrepeat"
+                                required
+                                placeholder="Repeat Password...">
+                            <div class="hint">
+                                Please repeat your Password
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="submit-container container">
+                        <button type="submit" name="signup-submit" id="signup-submit" class="submit-button">Sign up</button>
+                    </div>
+                    
+                </form>
+            </div>    
+
+
+            <div class="form-container container" id="logout-container">
+                <form class="form logout-form" id="logout-form" action="includes/logout.inc.php" method="post">
+                    <div class="submit-container container">
+                        <button type="submit" name="logout-submit" id="logout-submit" class="submit-button">Logout</button>
+                    </div>
+                </form>
+            </div>
+
+
+            <div class="form-container container" id="state-container">
+                <form class="form state-form" id="state-form" action="includes/isloggedin.inc.php" method="post">
+                    <div class="submit-container container">
+                        <button type="submit" name="state-submit" id="state-submit" class="submit-button">Login State</button>
+                    </div>
+                </form>
+            </div>
+
+
+            <div tabindex="0" id="form-data-sent" class="form-data-sent">
+                <div class="form-data-sent-message">
+                    <h2>Your have signed up successfully.</h2>
+                    <p><br>Please follow the link that has been sent to your email address to complete the registration process.</p> 
+                    <p style="font-weight: bold;"><br>Hit any key or click anywhere to continue.</p>
+                </div>
+            </div>
+    
+        </div>
+    </section>
+
+</body>
+</html>
