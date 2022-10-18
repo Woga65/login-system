@@ -77,7 +77,7 @@ switch($_SERVER['REQUEST_METHOD']) {
                     $pwdCheck = password_verify($pwd, $row['user_pwd']);
                     if ($pwdCheck == false) {                           //wrong password!
                         if ($jsonData) {
-                            echo '{ "err": "login incorrect", "fields": ["pwd"] }';
+                            echo '{ "err": "password incorrect", "fields": ["pwd"] }';
                         } else {
                             header("Location: ../index.php?login=nomatch");
                         }
@@ -116,7 +116,7 @@ switch($_SERVER['REQUEST_METHOD']) {
                 }
                 else {                                                  //no such user!
                     if ($jsonData) {
-                        echo '{ "err": "login incorrect", "fields": ["uid"] }';
+                        echo '{ "err": "no such user", "fields": ["uid"] }';
                     } else {
                         header("Location: ../index.php?login=nouser");
                     }
