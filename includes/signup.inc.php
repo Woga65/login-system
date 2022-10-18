@@ -35,7 +35,7 @@ switch($_SERVER['REQUEST_METHOD']) {
         if (!empty($antispam)) {
             //echo 'empty';
             if ($jsonData) { 
-                echo '{ "err": "empty" }';
+                echo '{ "err": "empty data", "ok": false }';
             } else { 
                 header("Location: ../index.php?signup=empty");
             }
@@ -44,7 +44,7 @@ switch($_SERVER['REQUEST_METHOD']) {
         else if (empty($uid) || empty($name) || empty($email) || empty($pwd) || empty($pwdRepeat)) {
             //echo 'empty';
             if ($jsonData) {
-                echo '{ "err": "empty" }';
+                echo '{ "err": "required field(s) empty", "ok": false }';
             } else {
                 header("Location: ../index.php?signup=empty");
             }
@@ -53,7 +53,7 @@ switch($_SERVER['REQUEST_METHOD']) {
         else if (!filter_var($email, FILTER_VALIDATE_EMAIL) && !preg_match("/^[a-zA-Z0-9]*$/", $uid)) {
             //echo 'data';
             if ($jsonData) {
-                echo '{ "err": "data", "fields": ["uid", "email"] }';
+                echo '{ "err": "invalid data", "ok": false, "fields": ["uid", "email"] }';
             } else { 
                 header("Location: ../index.php?signup=invalid");
             }
@@ -62,7 +62,7 @@ switch($_SERVER['REQUEST_METHOD']) {
         else if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             //echo 'email';
             if ($jsonData) {
-                echo '{ "err": "email", "fields": ["email"] }';
+                echo '{ "err": "invalid email address", "ok": false, "fields": ["email"] }';
             } else { 
                 header("Location: ../index.php?signup=invalidemail");
             }
@@ -71,7 +71,7 @@ switch($_SERVER['REQUEST_METHOD']) {
         else if(!preg_match("/^[a-zA-Z0-9]*$/", $uid)) {
             //echo 'uid';
             if ($jsonData) {
-                echo '{ "err": "uid", "fields": ["uid"] }';
+                echo '{ "err": "invalid user id", "ok": false, "fields": ["uid"] }';
             } else {
                 header("Location: ../index.php?signup=invaliduid");
             }
@@ -80,7 +80,7 @@ switch($_SERVER['REQUEST_METHOD']) {
         else if ($pwd !== $pwdRepeat) {
             //echo 'nomatch';
             if ($jsonData) {
-                echo '{ "err": "Passwords do not match", "fields": ["pwd", "pwdrepeat"] }';
+                echo '{ "err": "Passwords do not match", "ok": false, "fields": ["pwd", "pwdrepeat"] }';
             } else {
                 header("Location: ../index.php?signup=nomatch");
             }
@@ -93,7 +93,7 @@ switch($_SERVER['REQUEST_METHOD']) {
             $stmt = mysqli_stmt_init($conn);
             if (!mysqli_stmt_prepare($stmt, $sql)) {
                 if ($jsonData) {
-                    echo '{ "err": "sql error" }';
+                    echo '{ "err": "sql error", "ok": false }';
                 } else {
                     echo 'SQL ERROR: Something went horribly wrong!';
                 }
@@ -107,7 +107,7 @@ switch($_SERVER['REQUEST_METHOD']) {
                 if ($result > 0) {
                     //echo 'exists';
                     if ($jsonData) {
-                        echo '{ "err": "User exists", "fields": ["uid", "email"] }';
+                        echo '{ "err": "User exists", "ok": false, "fields": ["uid", "email"] }';
                     } else {
                         header("Location: ../index.php?signup=exists");
                     }
@@ -118,7 +118,7 @@ switch($_SERVER['REQUEST_METHOD']) {
                     $stmt = mysqli_stmt_init($conn);
                     if (!mysqli_stmt_prepare($stmt, $sql)) {
                         if ($jsonData) {
-                            echo '{ "err:" "sql error" }';
+                            echo '{ "err:" "sql error", "ok": false }';
                         } else {
                             echo 'SQL ERROR: Something went terribly wrong!';
                         }

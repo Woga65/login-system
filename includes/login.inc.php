@@ -27,7 +27,7 @@ switch($_SERVER['REQUEST_METHOD']) {
 
         if (!empty($antispam)) {                            //hidden bcc field not empty
             if ($jsonData) { 
-                echo '{ "err": "empty" }';
+                echo '{ "err": "empty", "ok": false }';
             } else { 
                 header("Location: ../index.php?login=empty");
             }
@@ -35,7 +35,7 @@ switch($_SERVER['REQUEST_METHOD']) {
         } 
         else if (empty($uid)) {              //empty field(s)!          
             if ($jsonData) { 
-                echo '{ "err": "empty", "fields": ["uid"] }';
+                echo '{ "err": "empty", "ok": false, "fields": ["uid"] }';
             } else { 
                 header("Location: ../index.php?login=empty");
             }
@@ -43,7 +43,7 @@ switch($_SERVER['REQUEST_METHOD']) {
         }
         else if (empty($pwd)) {              //empty field(s)!          
             if ($jsonData) { 
-                echo '{ "err": "empty", "fields": ["pwd"] }';
+                echo '{ "err": "empty", "ok": false, "fields": ["pwd"] }';
             } else { 
                 header("Location: ../index.php?login=empty");
             }
@@ -51,7 +51,7 @@ switch($_SERVER['REQUEST_METHOD']) {
         }
         else if (!filter_var($uid, FILTER_VALIDATE_EMAIL) && !preg_match("/^[a-zA-Z0-9]*$/", $uid)) {   //invalid data!
             if ($jsonData) {
-                echo '{ "err": "uid", "fields": ["uid"] }';
+                echo '{ "invalid user id": "uid", "ok": false, "fields": ["uid"] }';
             } else {
                 header("Location: ../index.php?login=invaliduid");
             }
@@ -63,7 +63,7 @@ switch($_SERVER['REQUEST_METHOD']) {
             $stmt = mysqli_stmt_init($conn);
             if (!mysqli_stmt_prepare($stmt, $sql)) {
                 if ($jsonData) {
-                    echo '{ "err": "sql error" }';
+                    echo '{ "err": "sql error", "ok": false }';
                 } else {
                     echo 'SQL ERROR: Something went horribly wrong!';
                 }
@@ -77,7 +77,7 @@ switch($_SERVER['REQUEST_METHOD']) {
                     $pwdCheck = password_verify($pwd, $row['user_pwd']);
                     if ($pwdCheck == false) {                           //wrong password!
                         if ($jsonData) {
-                            echo '{ "err": "password incorrect", "fields": ["pwd"] }';
+                            echo '{ "err": "password incorrect", "ok": false, "fields": ["pwd"] }';
                         } else {
                             header("Location: ../index.php?login=nomatch");
                         }
@@ -107,7 +107,7 @@ switch($_SERVER['REQUEST_METHOD']) {
                     }
                     else {                                              //should not happen at this point, just in case
                         if ($jsonData) {
-                            echo '{ "err": "login incorrect" }';
+                            echo '{ "err": "login incorrect", "ok": false }';
                         } else {
                             header("Location: ../index.php?login=nomatch");
                         }
@@ -116,7 +116,7 @@ switch($_SERVER['REQUEST_METHOD']) {
                 }
                 else {                                                  //no such user!
                     if ($jsonData) {
-                        echo '{ "err": "no such user", "fields": ["uid"] }';
+                        echo '{ "err": "no such user", "ok": false, "fields": ["uid"] }';
                     } else {
                         header("Location: ../index.php?login=nouser");
                     }

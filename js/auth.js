@@ -1,4 +1,4 @@
-const user = { data: {} };
+const user = { data: { loggedIn: null } };
 
 /* the forms array */
 const forms = [
@@ -39,15 +39,16 @@ initAuth();
 
 
 function initAuth() {
+    window.addEventListener('loginchange', loginStateListener); //listen for login state change
     checkUserLoggedIn();                                        //determine if a user is already logged in
-    document.querySelector('.fade-in').style.opacity = '1';     //let the document's body fade in
-    addHideDataSentMessageListeners();
+    addHideDataSentMessageListeners();                          //add event listeners to the notification modal
     forms.forEach((form, index) => {
         form.formFields.forEach(ff => form.defaultErrorMessages.push(ff.nextElementSibling.textContent.replace(/[\n\r]/g, ''))); //save default hints
         addFormFieldListeners(form);                                                        //form fields check valid data  
         form.submit.addEventListener('click', submitPreflightListener.bind(null, form));    //submit button clicked, check valid form data
         form.form.addEventListener('submit', submitListener.bind(null, form, index));       //on submit send form data to the end point
     });
+    document.querySelector('.fade-in').style.opacity = '1';     //let the document's body fade in
 }
 
 
@@ -90,6 +91,13 @@ function submitPreflightListener(form, e) {
 }
 
 
+/* event listener, on login state change */
+function loginStateListener(e) {
+    user.data = e.detail.loginState;
+    console.log('login state: ', e.detail.loginState);
+}
+
+
 /* event listener, on submit send form data to the endpoint*/
 function submitListener(form, index, e) {
     e.preventDefault();
@@ -97,12 +105,12 @@ function submitListener(form, index, e) {
     const formDataObject = Object.fromEntries(formData);
     submitRequest(form.endPoint, formDataObject)
         .then(result => {
-            console.log('result: ', result);
             if (result.ok) {
                 form.dataSent(result);
                 clearFormData(index);
             } else {
                 reportInvalidFormData(index, result);
+                console.log('result: ', result);
             }
         });
 }
@@ -134,23 +142,45 @@ function signupSuccess(result) {
 
 /* initialize form data, show logout button, hide login + signup form */
 function loginSuccess(result) {
-    user.data = result.data;
+    triggerLoginChangeEvent(result);
     document.getElementById('login-container').style.display = 'none';
     document.getElementById('signup-container').style.display = 'none';
     document.getElementById('logout-container').style.display = 'block';
-    document.getElementById('hello-message').innerHTML = `Hello <span class="fullname">${user.data.userName},</span> you are logged in as <span class="uname">${user.data.userId}.</span>`;
-    document.getElementById('verified-message').innerHTML = user.data.userVerified ? 'verified account' : 'Your account has not yet been verified';
+    document.querySelector('header').style.opacity = '0';
+    setTimeout(() => {
+        document.getElementById('hello-message').innerHTML = `Hello <span class="fullname">${user.data.userName},</span> you are logged in as <span class="uname">${user.data.userId}.</span>`;
+        document.getElementById('verified-message').innerHTML = user.data.userVerified ? 'verified account' : 'Your account has not yet been verified';
+        document.querySelector('header').style.opacity = '1';
+    }, 150);
 }
 
 
 /* initialize form data, hide logout button, show login + signup form */
 function logoutSuccess(result) {
-    user.data = result.data;
+    triggerLoginChangeEvent(result);
     document.getElementById('login-container').style.display = 'block';
-    document.getElementById('signup-container').style.display = 'block';
+    document.getElementById('signup-container').style.display = 'block';    
     document.getElementById('logout-container').style.display = 'none';
-    document.getElementById('hello-message').innerHTML = 'You are not logged in.';
-    document.getElementById('verified-message').innerHTML = '';
+    document.querySelector('header').style.opacity = '0';
+    setTimeout(() => {
+        document.getElementById('hello-message').innerHTML = 'You are not logged in.';
+        document.getElementById('verified-message').innerHTML = '&nbsp;';
+        document.querySelector('header').style.opacity = '1';
+    }, 150);
+}
+
+
+/* dispatch an event on login state change */
+function triggerLoginChangeEvent(result) {
+    if (result.ok && result.data.loggedIn != user.data.loggedIn) {
+        const loginChange = new CustomEvent('loginchange', {
+            detail: { loginState: result.data },
+            bubbles: true,
+            cancelable: true,
+            composed: false,
+        });
+        window.dispatchEvent(loginChange);
+    }
 }
 
 
@@ -193,7 +223,6 @@ function clearFormData(i) {
 async function checkUserLoggedIn() {
     return await submitRequest('includes/isloggedin.inc.php', {})
         .then(result => {
-            console.log('result: ', result);
             result.ok && result.data.loggedIn ? loginSuccess(result) : logoutSuccess(result);
             /* just for demonstration purpose */
             document.getElementById('state-container').style.display = 'block';
