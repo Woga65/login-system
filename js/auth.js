@@ -112,6 +112,7 @@ function signupButtonListener(e) {
     document.getElementById('signup-container').style.display = 'block';
     setTimeout(() => document.getElementById('signup-container').style.opacity = '1', 150);
     document.getElementById('login-container').style = 'opacity: 0; display: none;';
+    window.scroll({top: 0, left: 0, behavior: "smooth"});
 }
 
 
@@ -121,6 +122,7 @@ function loginButtonListener(e) {
     document.getElementById('login-container').style.display = 'block';
     setTimeout(() => document.getElementById('login-container').style.opacity = '1', 150);
     document.getElementById('signup-container').style = 'opacity: 0; display: none;';
+    setTimeout(() => window.scroll({top: 0, left: 0, behavior: "smooth"}), 150);
 }
 
 
@@ -186,6 +188,7 @@ function signupSuccess(result, loginData) {
     dataSentMsg.style.opacity = '1';
     dataSentMsg.focus();
     login(loginData);
+    window.scroll({top: 0, left: 0, behavior: "smooth"});
 }
 
 
@@ -201,6 +204,7 @@ function loginSuccess(result, loginData) {
         document.getElementById('verified-message').innerHTML = user.data.userVerified ? 'verified account' : 'Your account has not yet been verified';
         document.querySelector('header').style.opacity = '1';
     }, 150);
+    window.scroll({top: 0, left: 0, behavior: "smooth"});
 }
 
 
@@ -216,6 +220,7 @@ function logoutSuccess(result, loginData) {
         document.getElementById('verified-message').innerHTML = '&nbsp;';
         document.querySelector('header').style.opacity = '1';
     }, 150);
+    window.scroll({top: 0, left: 0, behavior: "smooth"});
 }
 
 
