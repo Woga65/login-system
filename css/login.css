@@ -5,10 +5,12 @@
 .fade-in {
   opacity: 0;
   transition: opacity 250ms ease-in-out 250ms;
+  -webkit-transition: opacity 250ms ease-in-out 250ms;
 }
 
 .fade-in-out {
   transition: opacity 150ms ease-in-out;
+  -webkit-transition: opacity 150ms ease-in-out;
 }
 
 .hello-message {
@@ -116,13 +118,15 @@
 .form .submit-container {
   display: flex;
   justify-content: flex-end;
-  flex-wrap: wrap;
+  flex-wrap: wrap-reverse;
   row-gap: calc(var(--font-size) * 1.5);
   column-gap: calc(var(--font-size) * 2.5);
+  -webkit-column-gap: calc(var(--font-size) * 2.5);
 }
 
 .form .submit-button,
-.form .signup-button {
+.form .signup-button,
+.form .login-button {
   border: 2px solid var(--secondary-accent);
   color: var(--secondary-accent);
   padding: calc(var(--font-size) * 1.15) calc(var(--font-size) * 3.8);
@@ -132,7 +136,8 @@
 }
 
 .form .submit-button:hover,
-.form .signup-button:hover {
+.form .signup-button:hover,
+.form .login-button:hover {
   outline-style: solid;
   outline-width: 1px;
   outline-color: var(--secondary-accent);
@@ -140,13 +145,22 @@
 }
 
 .form .submit-button:focus,
-.form .signup-button:focus {
-  box-shadow: 0px 0px 0px 1px;
+.form .signup-button:focus,
+.form .login-button:focus {
+  box-shadow: 0px 0px 0px 2px;
   border-radius: calc(var(--font-size) * .5);
 }
 
 .form .submit-container .signup-button {
   padding: calc(var(--font-size) * 1.15) calc(var(--font-size) * 3.3);
+}
+
+.form .submit-container .logout-button {
+  padding: calc(var(--font-size) * 1.15) calc(var(--font-size) * 3.4);
+}
+
+.form .submit-container .state-button {
+  padding: calc(var(--font-size) * 1.15) calc(var(--font-size) * 2.3);
 }
 
 .form .bcc {

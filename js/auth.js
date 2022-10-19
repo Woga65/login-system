@@ -1,9 +1,17 @@
 const user = { data: { loggedIn: null } };
 
+/* backend end points */
+const endPoints = { 
+    signup: 'includes/signup.inc.php',
+    login: 'includes/login.inc.php',
+    logout: 'includes/logout.inc.php',
+    loginState: 'includes/isloggedin.inc.php',
+}
+
 /* the forms array */
 const forms = [
     {
-        endPoint: 'includes/signup.inc.php',
+        endPoint: endPoints.signup,
         form: document.getElementById('signup-form'),
         submit: document.querySelector('.signup-form .submit-button'),
         formFields: document.querySelectorAll('.signup-form .form-field'),
@@ -12,7 +20,7 @@ const forms = [
         dataSent: signupSuccess,
     },
     {
-        endPoint: 'includes/login.inc.php',
+        endPoint: endPoints.login,
         form: document.getElementById('login-form'),
         submit: document.querySelector('.login-form .submit-button'),
         formFields: document.querySelectorAll('.login-form .form-field'),
@@ -21,7 +29,7 @@ const forms = [
         dataSent: loginSuccess,
     },
     {
-        endPoint: 'includes/logout.inc.php',
+        endPoint: endPoints.logout,
         form: document.getElementById('logout-form'),
         submit: document.querySelector('.logout-form .submit-button'),
         formFields: [],
@@ -48,6 +56,7 @@ function initAuth() {
         form.submit.addEventListener('click', submitPreflightListener.bind(null, form));    //submit button clicked, check valid form data
         form.form.addEventListener('submit', submitListener.bind(null, form, index));       //on submit send form data to the end point
     });
+    addNonSubmitButtonListeners();
     document.querySelector('.fade-in').style.opacity = '1';     //let the document's body fade in
 }
 
@@ -58,6 +67,14 @@ function addHideDataSentMessageListeners() {
         dataSentMsg.style.opacity = '0';
         setTimeout(() => dataSentMsg.style.display = 'none', 400);
     }));
+}
+
+
+/* add event listers for non submit buttons */
+function addNonSubmitButtonListeners() {
+    document.getElementById('signup-button').addEventListener('click', signupButtonListener);   //on click show signup form
+    document.getElementById('login-button').addEventListener('click', loginButtonListener);     //on click show login form
+    document.getElementById('guest-button').addEventListener('click', guestButtonListener);     //on click guest login
 }
 
 
@@ -76,6 +93,44 @@ function addFormFieldListeners(form) {
 }
 
 
+/* event listener, on click login as Guest */
+function guestButtonListener(e) {
+    const index = forms.findIndex(form => form.endPoint == endPoints.login);
+    const fields = [...(forms[index] || {}).formFields || []];
+    if (index > -1) {
+        clearFormData(index);
+        fields[fields.findIndex(f => f.name == 'uid')].value = 'Guest';
+        fields[fields.findIndex(f => f.name == 'pwd')].value = '123456';
+        document.getElementById('login-submit').focus();
+    }
+}
+
+
+/* event listener, on click hide login + show signup form */
+function signupButtonListener(e) {
+    forms.forEach((f, i) => clearFormData(i));
+    document.getElementById('signup-container').style.display = 'block';
+    setTimeout(() => document.getElementById('signup-container').style.opacity = '1', 150);
+    document.getElementById('login-container').style = 'opacity: 0; display: none;';
+}
+
+
+/* event listener, on click hide signup + show login form */
+function loginButtonListener(e) {
+    forms.forEach((f, i) => clearFormData(i));
+    document.getElementById('login-container').style.display = 'block';
+    setTimeout(() => document.getElementById('login-container').style.opacity = '1', 150);
+    document.getElementById('signup-container').style = 'opacity: 0; display: none;';
+}
+
+
+/* event listener, on login state change */
+function loginStateListener(e) {
+    user.data = e.detail.loginState;
+    console.log('login state: ', e.detail.loginState);
+}
+
+
 /* event listener, on submit button clicked, check
    if all required data has been entered correctly */
 function submitPreflightListener(form, e) {
@@ -91,13 +146,6 @@ function submitPreflightListener(form, e) {
 }
 
 
-/* event listener, on login state change */
-function loginStateListener(e) {
-    user.data = e.detail.loginState;
-    console.log('login state: ', e.detail.loginState);
-}
-
-
 /* event listener, on submit send form data to the endpoint*/
 function submitListener(form, index, e) {
     e.preventDefault();
@@ -106,7 +154,7 @@ function submitListener(form, index, e) {
     submitRequest(form.endPoint, formDataObject)
         .then(result => {
             if (result.ok) {
-                form.dataSent(result);
+                form.dataSent(result, formDataObject);
                 clearFormData(index);
             } else {
                 reportInvalidFormData(index, result);
@@ -133,19 +181,20 @@ async function submitRequest(endPoint, dataObject) {
 
 
 /* initialize form data and show notification */
-function signupSuccess(result) {
+function signupSuccess(result, loginData) {
     dataSentMsg.style.display = 'flex';
     dataSentMsg.style.opacity = '1';
     dataSentMsg.focus();
+    login(loginData);
 }
 
 
 /* initialize form data, show logout button, hide login + signup form */
-function loginSuccess(result) {
+function loginSuccess(result, loginData) {
     triggerLoginChangeEvent(result);
-    document.getElementById('login-container').style.display = 'none';
-    document.getElementById('signup-container').style.display = 'none';
-    document.getElementById('logout-container').style.display = 'block';
+    document.getElementById('login-container').style = 'opacity: 0; display: none;';
+    document.getElementById('signup-container').style = 'opacity: 0; display: none;';
+    document.getElementById('logout-container').style = 'display: block; opacity: 1;';
     document.querySelector('header').style.opacity = '0';
     setTimeout(() => {
         document.getElementById('hello-message').innerHTML = `Hello <span class="fullname">${user.data.userName},</span> you are logged in as <span class="uname">${user.data.userId}.</span>`;
@@ -156,11 +205,11 @@ function loginSuccess(result) {
 
 
 /* initialize form data, hide logout button, show login + signup form */
-function logoutSuccess(result) {
+function logoutSuccess(result, loginData) {
     triggerLoginChangeEvent(result);
-    document.getElementById('login-container').style.display = 'block';
-    document.getElementById('signup-container').style.display = 'block';    
-    document.getElementById('logout-container').style.display = 'none';
+    document.getElementById('login-container').style = 'display: block; opacity: 1;';
+    document.getElementById('signup-container').style = 'opacity: 0; display: none;';    
+    document.getElementById('logout-container').style = 'opacity: 0; display: none;';
     document.querySelector('header').style.opacity = '0';
     setTimeout(() => {
         document.getElementById('hello-message').innerHTML = 'You are not logged in.';
@@ -215,13 +264,14 @@ function clearFormData(i) {
         ff.value = '';
         forms[i].isDirty[j] = false;
         ff.nextElementSibling.textContent = forms[i].defaultErrorMessages[j];
+        ff.classList.toggle('invalid', false);
     });
 }
 
 
 /* determine if a user is already logged in */
 async function checkUserLoggedIn() {
-    return await submitRequest('includes/isloggedin.inc.php', {})
+    return await submitRequest(endPoints.loginState, {})
         .then(result => {
             result.ok && result.data.loggedIn ? loginSuccess(result) : logoutSuccess(result);
             /* just for demonstration purpose */
@@ -230,4 +280,18 @@ async function checkUserLoggedIn() {
 }
 
 
-export { checkUserLoggedIn, user }
+/* user login */
+async function login(loginData) {
+    return await submitRequest(endPoints.login, loginData)
+        .then(result => result.ok ? loginSuccess(result) : logoutSuccess(result));
+}
+
+
+/* user logout */
+async function logout() {
+    return await submitRequest(endPoints.logout, {})
+        .then(result => logoutSuccess(result));
+}
+
+
+export { login, logout, checkUserLoggedIn, user }

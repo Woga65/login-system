@@ -23,7 +23,7 @@
         <div class="auth-container base-margin top-margin bottom-margin">
 
 
-            <div class="form-container container" id="login-container">
+            <div class="form-container container fade-in-out" id="login-container">
                 <form class="form login-form" id="login-form" action="includes/login.inc.php" method="post">
         
                     <div class="field-container container">
@@ -74,6 +74,8 @@
                     </div>
 
                     <div class="submit-container container">
+                        <button type="button" id="guest-button" class="login-button">Guest</button>
+                        <button type="button" id="signup-button" class="signup-button">Sign up</button>
                         <button type="submit" name="login-submit" id="login-submit" class="submit-button">Login</button>
                     </div>
                     
@@ -81,7 +83,7 @@
             </div>
 
 
-            <div class="form-container container" id="signup-container">
+            <div class="form-container container fade-in-out" id="signup-container">
                 <form class="form signup-form" id="signup-form" action="includes/signup.inc.php" method="post">
 
                     <div class="field-container container">
@@ -181,7 +183,8 @@
                     </div>
 
                     <div class="submit-container container">
-                        <button type="submit" name="signup-submit" id="signup-submit" class="submit-button">Sign up</button>
+                        <button type="button" id="login-button" class="login-button">Login</button>
+                        <button type="submit" name="signup-submit" id="signup-submit" class="submit-button signup-button">Sign up</button>
                     </div>
                     
                 </form>
@@ -191,7 +194,7 @@
             <div class="form-container container" id="logout-container">
                 <form class="form logout-form" id="logout-form" action="includes/logout.inc.php" method="post">
                     <div class="submit-container container">
-                        <button type="submit" name="logout-submit" id="logout-submit" class="submit-button">Logout</button>
+                        <button type="submit" name="logout-submit" id="logout-submit" class="submit-button logout-button">Logout</button>
                     </div>
                 </form>
             </div>
@@ -200,7 +203,7 @@
             <div class="form-container container" id="state-container">
                 <form class="form state-form" id="state-form" action="includes/isloggedin.inc.php" method="post">
                     <div class="submit-container container">
-                        <button type="submit" name="state-submit" id="state-submit" class="submit-button">Login State</button>
+                        <button type="submit" name="state-submit" id="state-submit" class="submit-button state-button">Login State</button>
                     </div>
                 </form>
             </div>
