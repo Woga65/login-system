@@ -6,6 +6,7 @@ const endPoints = {
     login: 'includes/login.inc.php',
     logout: 'includes/logout.inc.php',
     loginState: 'includes/isloggedin.inc.php',
+    verificationState: 'includes/isVerified.inc.php',
 }
 
 /* the forms array */
@@ -282,6 +283,24 @@ async function checkUserLoggedIn() {
             /* just for demonstration purpose */
             document.getElementById('state-container').style.display = 'block';
         });
+}
+
+
+/* determine if a user's account is verified */
+async function checkUserVerified() {
+    if (user.data.loggedIn) {
+        return await submitRequest(endPoints.verificationState, { uid: user.data.userId, email: user.data.userEmail, bcc: "" })
+            .then(result => {
+                if (result.ok && result.data.loggedIn) {
+                    user.data.userVerified = result.data.userVerified;
+                    result.data = user.data;
+                    loginSuccess(result)
+                } else {
+                    result.data.loggedIn = false;
+                    logoutSuccess(result);
+                }
+            });
+    }
 }
 
 
