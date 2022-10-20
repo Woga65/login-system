@@ -57,7 +57,7 @@
 }
 
 .form-container {
-  margin-top: calc(var(--font-size) * 2.5);
+  margin-top: calc(var(--font-size) * 0);
 }
 
 .form .field-container {
@@ -69,7 +69,7 @@
 }
 
 .form .submit-container {
-  margin-top: calc(var(--font-size) * 2);
+  margin-top: calc(var(--font-size) * 3.5);
 }
 
 .form .form-field {
@@ -103,7 +103,8 @@
     left: calc(var(--font-size) * .6);
     width: fit-content;
     background: linear-gradient(180deg, var(--secondary-bgr), var(--primary-bgr));
-    padding-right: calc(var(--font-size) * .2);
+    padding-left: calc(var(--font-size) * .2);
+    padding-right: calc(var(--font-size) * .1);
     display: none;
 }
 
