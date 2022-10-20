@@ -127,10 +127,11 @@
 
 .form .submit-button,
 .form .signup-button,
-.form .login-button {
+.form .login-button,
+.form .guest-button {
   border: 2px solid var(--secondary-accent);
   color: var(--secondary-accent);
-  padding: calc(var(--font-size) * 1.15) calc(var(--font-size) * 3.8);
+  padding: calc(var(--font-size) * 1.15) calc(var(--font-size) * 3.81);
   outline-color: var(--secondary-accent-invisible);
   transition: all 125ms ease-in-out;
   -webkit-transition: all 125ms ease-in-out;
@@ -138,7 +139,8 @@
 
 .form .submit-button:hover,
 .form .signup-button:hover,
-.form .login-button:hover {
+.form .login-button:hover,
+.form .guest-button:hover {
   outline-style: solid;
   outline-width: 1px;
   outline-color: var(--secondary-accent);
@@ -147,7 +149,8 @@
 
 .form .submit-button:focus,
 .form .signup-button:focus,
-.form .login-button:focus {
+.form .login-button:focus,
+.form .guest-button:focus {
   box-shadow: 0px 0px 0px 2px;
   border-radius: calc(var(--font-size) * .5);
 }
@@ -158,6 +161,10 @@
 
 .form .submit-container .logout-button {
   padding: calc(var(--font-size) * 1.15) calc(var(--font-size) * 3.4);
+}
+
+.form .submit-container .guest-button {
+  padding: calc(var(--font-size) * 1.15) calc(var(--font-size) * 3.74);
 }
 
 .form .submit-container .state-button {
