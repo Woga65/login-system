@@ -1,4 +1,4 @@
-const user = { data: { loggedIn: null } };
+const user = { timer: null, timerRunning: false, data: { loggedIn: null } };
 
 /* backend end points */
 const endPoints = { 
@@ -193,35 +193,19 @@ function signupSuccess(result, loginData) {
 }
 
 
-/* initialize form data, show logout button, hide login + signup form */
+/* show logout button, hide login + signup form */
 function loginSuccess(result, loginData) {
     triggerLoginChangeEvent(result);
-    document.getElementById('login-container').style = 'opacity: 0; display: none;';
-    document.getElementById('signup-container').style = 'opacity: 0; display: none;';
-    document.getElementById('logout-container').style = 'display: block; opacity: 1;';
-    document.querySelector('header').style.opacity = '0';
-    setTimeout(() => {
-        document.getElementById('hello-message').innerHTML = `Hello <span class="fullname">${user.data.userName},</span> you are logged in as <span class="uname">${user.data.userId}.</span>`;
-        document.getElementById('verified-message').innerHTML = user.data.userVerified ? 'verified account' : 'Your account has not yet been verified';
-        document.querySelector('header').style.opacity = '1';
-    }, 150);
-    window.scroll({top: 0, left: 0, behavior: "smooth"});
+    result.data.userVerified ? userDataUpdateTimer(false) : userDataUpdateTimer(true);
+    hideLoginForm();
 }
 
 
-/* initialize form data, hide logout button, show login + signup form */
+/* hide logout button, show login + signup form */
 function logoutSuccess(result, loginData) {
     triggerLoginChangeEvent(result);
-    document.getElementById('login-container').style = 'display: block; opacity: 1;';
-    document.getElementById('signup-container').style = 'opacity: 0; display: none;';    
-    document.getElementById('logout-container').style = 'opacity: 0; display: none;';
-    document.querySelector('header').style.opacity = '0';
-    setTimeout(() => {
-        document.getElementById('hello-message').innerHTML = 'You are not logged in.';
-        document.getElementById('verified-message').innerHTML = '&nbsp;';
-        document.querySelector('header').style.opacity = '1';
-    }, 150);
-    window.scroll({top: 0, left: 0, behavior: "smooth"});
+    userDataUpdateTimer(false);
+    showLoginForm();
 }
 
 
@@ -236,6 +220,36 @@ function triggerLoginChangeEvent(result) {
         });
         window.dispatchEvent(loginChange);
     }
+}
+
+
+/* hide logout button, show login + signup form */
+function showLoginForm() {
+    document.getElementById('login-container').style = 'display: block; opacity: 1;';
+    document.getElementById('signup-container').style = 'opacity: 0; display: none;';    
+    document.getElementById('logout-container').style = 'opacity: 0; display: none;';
+    document.querySelector('header').style.opacity = '0';
+    setTimeout(() => {
+        document.getElementById('hello-message').innerHTML = 'You are not logged in.';
+        document.getElementById('verified-message').innerHTML = '&nbsp;';
+        document.querySelector('header').style.opacity = '1';
+    }, 150);
+    window.scroll({top: 0, left: 0, behavior: "smooth"});
+}
+
+
+/* show logout button, hide login + signup form */
+function hideLoginForm() {
+    document.getElementById('login-container').style = 'opacity: 0; display: none;';
+    document.getElementById('signup-container').style = 'opacity: 0; display: none;';
+    document.getElementById('logout-container').style = 'display: block; opacity: 1;';
+    document.querySelector('header').style.opacity = '0';
+    setTimeout(() => {
+        document.getElementById('hello-message').innerHTML = `Hello <span class="fullname">${user.data.userName},</span> you are logged in as <span class="uname">${user.data.userId}.</span>`;
+        document.getElementById('verified-message').innerHTML = user.data.userVerified ? 'verified account' : 'Your account has not yet been verified';
+        document.querySelector('header').style.opacity = '1';
+    }, 150);
+    window.scroll({top: 0, left: 0, behavior: "smooth"});
 }
 
 
@@ -275,6 +289,19 @@ function clearFormData(i) {
 }
 
 
+/* periodically update user state from database */
+function userDataUpdateTimer(startTimer) {
+    if (!user.timerRunning && startTimer) {
+        user.timerRunning = true;
+        user.timer = setInterval(() => checkUserVerified(), 2000);
+    } else if (!startTimer) {
+        clearInterval(user.timer);
+        user.timerRunning = false;
+        user.timer = null;
+    }
+}
+
+
 /* determine if a user is already logged in */
 async function checkUserLoggedIn() {
     return await submitRequest(endPoints.loginState, {})
@@ -290,7 +317,13 @@ async function checkUserLoggedIn() {
 async function checkUserVerified() {
     if (user.data.loggedIn) {
         return await submitRequest(endPoints.verificationState, {})
-            .then(result => result.ok && result.data.loggedIn ? loginSuccess(result) : logoutSuccess(result));
+            .then(result => {
+                if (result.ok && result.data.loggedIn) {
+                    result.data.userVerified != user.data.userVerified ? (user.data = result.data, loginSuccess(result)) : false;
+                } else {
+                    logoutSuccess(result);
+                }
+            });
     }
 }
 
