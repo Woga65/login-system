@@ -51,7 +51,8 @@
 
 .form,
 .hello-message,
-.verified-message {
+.verified-message,
+.form-link-container {
   margin-left: calc(var(--font-size) * .5);
   margin-right: calc(var(--font-size) * .5);
 }
@@ -132,6 +133,7 @@
   padding: calc(var(--font-size) * 1.15);
   outline-color: var(--secondary-accent-invisible);
   min-width: calc(var(--font-size) * 10.875);
+  flex-grow: 1;
   transition: all 125ms ease-in-out;
   -webkit-transition: all 125ms ease-in-out;
 }
@@ -148,6 +150,26 @@
 .form .non-submit-button:focus {
   box-shadow: 0px 0px 0px 2px;
   border-radius: calc(var(--font-size) * .5);
+}
+
+
+.form-link-container {
+  font-family: var(--primary-font);
+  font-size: calc(var(--font-size) * 1.125);
+  margin-top: calc(var(--font-size) * 3);
+  text-align: center;
+}
+
+.form-link-container .link-style-button {
+  font-family: var(--primary-font);
+  color: var(--secondary-accent);
+  margin: 0 calc(var(--font-size) * .2);; 
+}
+
+.form-link-container .link-style-button:hover,
+.form-link-container .link-style-button:focus {
+  text-decoration: underline;
+  opacity: .8;
 }
 
 .form .bcc {
@@ -184,7 +206,8 @@
 @media only screen and (min-width: 675px) {
   .form,
   .hello-message,
-  .verified-message {
+  .verified-message,
+  .form-link-container {
     margin-left: calc(var(--font-size) * 2);
     margin-right: calc(var(--font-size) * 2);
   }
@@ -193,7 +216,8 @@
 @media only screen and (min-width: 948px) {
   .form,
   .hello-message,
-  .verified-message {
+  .verified-message,
+  .form-link-container {
     margin-left: calc(var(--font-size) * 4);
     margin-right: calc(var(--font-size) * 4);
   }
@@ -202,7 +226,8 @@
 @media only screen and (min-width: 1080px) {
   .form,
   .hello-message,
-  .verified-message {
+  .verified-message,
+  .form-link-container {
     margin-left: calc(var(--font-size) * 6);
     margin-right: calc(var(--font-size) * 6);
   }
@@ -211,7 +236,8 @@
 @media only screen and (min-width: 1280px) {
   .form,
   .hello-message,
-  .verified-message {
+  .verified-message,
+  .form-link-container {
     margin-left: calc(var(--font-size) * 6);
     margin-right: calc(var(--font-size) * 6);
   }

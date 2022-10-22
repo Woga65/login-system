@@ -211,7 +211,7 @@ function logoutSuccess(result, loginData) {
 
 /* dispatch an event on login state change */
 function triggerLoginChangeEvent(result) {
-    if (result.ok && result.data.loggedIn != user.data.loggedIn) {
+    if (result.ok && (result.data.loggedIn != user.data.loggedIn || result.data.userVerified != user.data.userVerified)) {
         const loginChange = new CustomEvent('loginchange', {
             detail: { loginState: result.data },
             bubbles: true,
@@ -319,7 +319,7 @@ async function checkUserVerified() {
         return await submitRequest(endPoints.verificationState, {})
             .then(result => {
                 if (result.ok && result.data.loggedIn) {
-                    result.data.userVerified != user.data.userVerified ? (user.data = result.data, loginSuccess(result)) : false;
+                    result.data.userVerified != user.data.userVerified ? loginSuccess(result) : false;
                 } else {
                     logoutSuccess(result);
                 }
