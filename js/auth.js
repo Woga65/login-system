@@ -102,7 +102,7 @@ function guestButtonListener(e) {
         clearFormData(index);
         fields[fields.findIndex(f => f.name == 'uid')].value = 'Guest';
         fields[fields.findIndex(f => f.name == 'pwd')].value = '123456';
-        document.getElementById('login-submit').focus();
+        document.getElementById('login-submit').click();
     }
 }
 
