@@ -14,6 +14,7 @@
 }
 
 .hello-message {
+  text-align: left;
   color: var(--primary-color);    
   padding-top: calc(var(--font-size) * 2);
 }
@@ -27,6 +28,8 @@
 }
 
 .verified-message {
+  text-align: left;
+  color: var(--primary-color);
   margin-top: calc(var(--font-size) * 1);
 }
 
@@ -156,6 +159,7 @@
 .form-link-container {
   font-family: var(--primary-font);
   font-size: calc(var(--font-size) * 1.125);
+  color: var(--primary-color);
   margin-top: calc(var(--font-size) * 3);
   text-align: center;
 }
@@ -178,10 +182,10 @@
 
 .form-data-sent {
   position: fixed;
-  top: calc(var(--font-size) * var(--header-height) * 0);
+  top: 0;
   left: 0;
   width: 100%;
-  height: calc(100vh - var(--font-size) * var(--header-height) * 0);
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -191,7 +195,7 @@
   z-index: 999;
   backdrop-filter: blur(3px);
   -webkit-backdrop-filter: blur(2px);
-  background-color: #0000004f;
+  background-color: var(--primary-bgr-translucent);
   color: var(--primary-color);
   transition: opacity 400ms ease-in-out;
   -webkit-transition: opacity 400ms ease-in-out;
