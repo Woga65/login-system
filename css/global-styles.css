@@ -14,9 +14,10 @@
     --monospace-font: 'Source Code Pro';
     --header-height: 5.375;
     --scroll-margin: 5.375;
-    --primary-bgr: #1a1a1a;
-    --secondary-bgr: #000000;
-    --secondary-bgr-translucent: #000000f0;
+    --primary-bgr: #000000;
+    --primary-bgr-translucent: #000000f0;    
+    --secondary-bgr: #1a1a1a;
+    --secondary-bgr-translucent: #1a1a1af0;
     --primary-color: #f0f0f0;
     --primary-color-opaque: #f0f0f0ff;
     --primary-color-translucent: #f0f0f080;

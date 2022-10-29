@@ -1,5 +1,5 @@
 .main {
-  background-color: var(--secondary-bgr);
+  background-color: var(--primary-bgr);
 }
 
 .fade-in {
@@ -37,7 +37,7 @@
 
 .auth {
   position: relative;
-  background-color: var(--secondary-bgr);
+  background-color: var(--primary-bgr);
   min-height: 100vh;
 }
 
@@ -76,7 +76,7 @@
 .form .form-field {
   width: 100%;
   padding: calc(var(--font-size) * .6) calc(var(--font-size) * .6);
-  background-color: var(--primary-bgr);
+  background-color: var(--secondary-bgr);
   color: var(--primary-color);
   border: none;
   outline-color: var(--secondary-accent-invisible);
@@ -103,7 +103,7 @@
     font-size: calc(var(--font-size) * .8);
     left: calc(var(--font-size) * .6);
     width: fit-content;
-    background: linear-gradient(180deg, var(--secondary-bgr), var(--primary-bgr));
+    background: linear-gradient(180deg, var(--primary-bgr), var(--secondary-bgr));
     padding-left: calc(var(--font-size) * .2);
     padding-right: calc(var(--font-size) * .1);
     display: none;
