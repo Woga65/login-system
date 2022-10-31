@@ -7,6 +7,7 @@ const endPoints = {
     logout: 'includes/logout.inc.php',
     loginState: 'includes/isloggedin.inc.php',
     verificationState: 'includes/isverified.inc.php',
+    sessionExists: 'includes/sessionexists.inc.php',
 }
 
 /* the forms array */
@@ -302,13 +303,28 @@ function userDataUpdateTimer(startTimer) {
 }
 
 
+/* periodically update the login state from session data */
+function loginChangeTimer() {
+    return setInterval(() => this.checkLoginChange(), 250);
+}
+
+        
+/* determine if a user has logged in or out */
+async function checkLoginChange() {
+    return await submitRequest(endPoints.sessionExists, {})
+        .then(result => {
+            if (result.ok && result.data.loggedIn != user.data.loggedIn) this.checkUserLoggedIn();
+        });
+}
+
+
 /* determine if a user is already logged in */
 async function checkUserLoggedIn() {
     return await submitRequest(endPoints.loginState, {})
         .then(result => {
             result.ok && result.data.loggedIn ? loginSuccess(result) : logoutSuccess(result);
             /* just for demonstration purpose */
-            document.getElementById('state-container').style.display = 'block';
+            //document.getElementById('state-container').style.display = 'block';
         });
 }
 
