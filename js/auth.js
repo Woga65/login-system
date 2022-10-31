@@ -51,6 +51,7 @@ initAuth();
 function initAuth() {
     window.addEventListener('loginchange', loginStateListener); //listen for login state change
     checkUserLoggedIn();                                        //determine if a user is already logged in
+    const timer = loginChangeTimer(5000);
     addHideDataSentMessageListeners();                          //add event listeners to the notification modal
     forms.forEach((form, index) => {
         form.formFields.forEach(ff => form.defaultErrorMessages.push(ff.nextElementSibling.textContent.replace(/[\n\r]/g, ''))); //save default hints
@@ -304,8 +305,8 @@ function userDataUpdateTimer(startTimer) {
 
 
 /* periodically update the login state from session data */
-function loginChangeTimer() {
-    return setInterval(() => this.checkLoginChange(), 250);
+function loginChangeTimer(interval) {
+    return setInterval(() => checkLoginChange(), interval);
 }
 
         
@@ -313,7 +314,7 @@ function loginChangeTimer() {
 async function checkLoginChange() {
     return await submitRequest(endPoints.sessionExists, {})
         .then(result => {
-            if (result.ok && result.data.loggedIn != user.data.loggedIn) this.checkUserLoggedIn();
+            if (result.ok && result.data.loggedIn != user.data.loggedIn) checkUserLoggedIn();
         });
 }
 
