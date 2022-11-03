@@ -8,6 +8,7 @@ const endPoints = {
     loginState: 'includes/isloggedin.inc.php',
     verificationState: 'includes/isverified.inc.php',
     sessionExists: 'includes/sessionexists.inc.php',
+    createTable: 'includes/ifnotexistscreatetable.php',
 }
 
 /* the forms array */
@@ -48,19 +49,50 @@ const dataSentMsg = document.querySelector('.form-data-sent');
 initAuth();
 
 
-function initAuth() {
-    window.addEventListener('loginchange', loginStateListener); //listen for login state change
-    checkUserLoggedIn();                                        //determine if a user is already logged in
-    const timer = loginChangeTimer(5000);
+/* initialize the login system */
+async function initAuth() {
+    await submitRequest(endPoints.createTable, {})
+        .then(result => {
+            if (result.ok) {
+                initLogin();
+                initUserInterface();
+            }
+            console.log('db state: ', result);
+        });
+}
+        
+
+/* initiallize login state related stuff */
+function initLogin() {
+    window.addEventListener('loginchange', loginStateListener);     //listen for login state change
+    checkUserLoggedIn();                                            //determine if a user is already logged in
+    const loginStateTimer = loginChangeTimer(5000);                 //periodically check for login/logout
+}
+
+
+/* initialize forms and ui related stuff */ 
+function initUserInterface() {
     addHideDataSentMessageListeners();                          //add event listeners to the notification modal
     forms.forEach((form, index) => {
         form.formFields.forEach(ff => form.defaultErrorMessages.push(ff.nextElementSibling.textContent.replace(/[\n\r]/g, ''))); //save default hints
-        addFormFieldListeners(form);                                                        //form fields check valid data  
-        form.submit.addEventListener('click', submitPreflightListener.bind(null, form));    //submit button clicked, check valid form data
-        form.form.addEventListener('submit', submitListener.bind(null, form, index));       //on submit send form data to the end point
+        addFormFieldListeners(form);                                                       //form fields check valid data  
+        form.submit.addEventListener('click', submitPreflightListener.bind(null, form));   //submit button clicked, check valid form data
+        form.form.addEventListener('submit', submitListener.bind(null, form, index));      //on submit send form data to the end point
     });
     addNonSubmitButtonListeners();
-    document.querySelector('.fade-in').style.opacity = '1';     //let the document's body fade in
+    setTranslucentBackgroundColor();
+    setTimeout(() => document.querySelector('.fade-in').style.opacity = '1', 125);         //let the component's body fade in
+}
+
+
+/* get the primary background color, add transparency  
+ * and store it in a css variable  */
+function setTranslucentBackgroundColor() {
+    const r = document.querySelector(':root');
+    const cssVar = getComputedStyle(r).getPropertyValue('--primary-bgr').trim();
+    if (cssVar) {
+        r.style.setProperty('--primary-bgr-translucent', cssVar.startsWith('#') ? cssVar + '80' : cssVar);
+    }
 }
 
 
