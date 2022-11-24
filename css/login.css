@@ -80,6 +80,7 @@
   width: 100%;
   padding: calc(var(--font-size) * .6) calc(var(--font-size) * .6);
   background-color: var(--secondary-bgr);
+  box-shadow: 0 0 0 40px var(--secondary-bgr) inset;
   color: var(--primary-color);
   border: none;
   outline-color: var(--secondary-accent-invisible);
