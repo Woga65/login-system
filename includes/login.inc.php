@@ -51,7 +51,7 @@ switch($_SERVER['REQUEST_METHOD']) {
         }
         else if (!filter_var($uid, FILTER_VALIDATE_EMAIL) && !preg_match("/^[a-zA-Z0-9]*$/", $uid)) {   //invalid data!
             if ($jsonData) {
-                echo '{ "invalid user id": "uid", "ok": false, "fields": ["uid"] }';
+                echo '{ "err": "invalid user id", "ok": false, "fields": ["uid"] }';
             } else {
                 header("Location: ../index.php?login=invaliduid");
             }
