@@ -45,7 +45,7 @@
                         mysqli_stmt_bind_param($stmt, "s", $vkey);
                         mysqli_stmt_execute($stmt);
                         echo "<h2 align='center'>Congratulations <span>$user,</span> your account has been verified successfully!<br></h2>";
-                        echo '<p align="center"><a href="https://wolfgang-siebert.de/projects/simple-login/index.html"><br>Please click here, go to the login page.</a></p>';
+                        echo '<p align="center"><a href="https://wolfgang-siebert.de/projects/simple-login/index.html"><br>Please click here to go to the login page.</a></p>';
                     }
                 }
                 else {

@@ -126,7 +126,7 @@ switch($_SERVER['REQUEST_METHOD']) {
                     }
                     else {  //success
                         $hashedpwd = password_hash($pwd, PASSWORD_DEFAULT);
-                        $vkey = password_hash(date() . $uid, PASSWORD_DEFAULT);
+                        $vkey = password_hash(date('Y-m-d H:i:s') . $uid, PASSWORD_DEFAULT);
                         $verified = 0;
                         mysqli_stmt_bind_param($stmt, "sssssi", $uid, $name, $email, $hashedpwd, $vkey, $verified);
                         mysqli_stmt_execute($stmt);
